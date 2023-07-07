@@ -1,0 +1,38 @@
+{% extends "home.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  {% load crispy_forms_tags %}
+  <link rel='stylesheet' href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <title>Login</title>
+</head>
+<body>
+  {% block content %}
+  <div class="d-flex flex-column align-items-center justify-content-center p-3 m-5">
+    <div class="col-12 col-md-6">
+      <h2 class="pb-5 text-center">Login</h2>
+      {% if messages %}
+      <ul class="messages text-danger p-5">
+          {% for message in messages %}
+          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+  {% endif %} 
+    <form action="/login" method="POST">
+        {% csrf_token %}
+        <table>
+          {{ log_form|crispy }}
+        </table>
+        <button class="btn btn-primary mt-3">Login</button>
+    </form>
+    <p class="mt-3">If you don't have an account? Please  <a href="/register" class="mx-3  text-info">Sign Up</a> first.</p>
+  </div>
+</div>
+{% endblock %}
+</body>
+</html>
