@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout', views.logout_user),
     path('profile', views.profile_page),
     path('favorite', views.favorite_page),
+    path('search', views.search),
     # path('profile/<int:user_id>', views.user_profile),
     # path('movies/<int:movie_id>', views.movie_detail),
     # path('movies/<int:movie_id>/add/favorite', views.add_favorite),

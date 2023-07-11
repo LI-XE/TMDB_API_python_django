@@ -1,17 +1,48 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from .forms import RegistrationForm
+import requests
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+TMDB_API_KEY = "ad10831a1d59bb10647b7f970dc3d4d8"
 # Create your views here.
 def home(request):
+    
+    data = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=en-US&page=1")
+    movies = data.json()
+    print(movies)
+
     context = {
-        "user": request.user
+        "user": request.user,
+        "movies": movies["results"]
     }
     return render(request, "home.html", context)
+
+
+
+def search(request):
+
+    # Get the query from the search box
+    query = request.GET.get('q')
+    print( request.GET.get('q'))
+
+    # If the query is not empty
+    if query:
+
+        # Get the results from the API
+
+        data = requests.get(f"https://api.themoviedb.org/3/search/tv?query={query}&api_key={TMDB_API_KEY}&language=en-US&include_adult=false")
+        print(data.json()["results"])
+    else:
+        return HttpResponse("Please enter a search query")
+
+    # Render the template
+    return render(request, 'search.html', context={
+        "data": data.json()["results"],
+        "type": request.GET.get("type")
+    })
 
 def register_page(request):
 
