@@ -1,27 +1,45 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .forms import RegistrationForm
+from .models import Favorite
 import requests
+from django.conf import settings
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-TMDB_API_KEY = "ad10831a1d59bb10647b7f970dc3d4d8"
-# Create your views here.
-def home(request):
+from django.http import JsonResponse
+from dotenv import load_dotenv
+import os
+
+
+
+def configure():
+    load_dotenv()
     
-    data = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=en-US&page=1")
+DB_API_KEY = os.getenv('DB_API_KEY')
+
+
+
+# Home page
+def home(request):
+    configure()
+    data = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={DB_API_KEY}&language=en-US&page=1")
     movies = data.json()
-    print(movies)
 
     context = {
         "user": request.user,
-        "movies": movies["results"]
+        "movies": movies["results"],
     }
     return render(request, "home.html", context)
 
+def loadmoreJson(request, current_page):
+    # currentPage += 1
+    data = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={DB_API_KEY}&language=en-US&page={current_page}")
+    return JsonResponse({'data': data.json(), 'current_page':current_page})
 
 
+# Search Movies
 def search(request):
 
     # Get the query from the search box
@@ -33,7 +51,7 @@ def search(request):
 
         # Get the results from the API
 
-        data = requests.get(f"https://api.themoviedb.org/3/search/tv?query={query}&api_key={TMDB_API_KEY}&language=en-US&include_adult=false")
+        data = requests.get(f"https://api.themoviedb.org/3/search/tv?query={query}&api_key={DB_API_KEY}&language=en-US&include_adult=false")
         print(data.json()["results"])
     else:
         return HttpResponse("Please enter a search query")
@@ -41,8 +59,24 @@ def search(request):
     # Render the template
     return render(request, 'search.html', context={
         "data": data.json()["results"],
-        "type": request.GET.get("type")
     })
+
+
+# Get Movie Detail 
+def movie_detail_page(request, movie_id):
+    data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={DB_API_KEY}&language=en-US")
+    if data:
+        movie = data.json()
+        print(data)
+        context={
+            "movie": movie,
+        }
+    else:
+        return HttpResponse("Sorry! This movie doesn't have movie detail.")
+    return render(request, "movieDetail.html", context)
+
+
+
 
 def register_page(request):
 
@@ -84,8 +118,6 @@ def logout_user(request):
 def profile_page(request):
     return render(request, "profile.html")
 
-def movie_detail(request):
-    return render(request, "movieDetail.html")
 
 def favorite_page(request):
     return render(request, "favorite.html")
