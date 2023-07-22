@@ -52,13 +52,14 @@ def search(request):
 
         data = requests.get(f"https://api.themoviedb.org/3/search/tv?query={query}&api_key={DB_API_KEY}&language=en-US&include_adult=false")
         print(data.json()["results"])
+        return render(request, 'search.html', context={
+        "data": data.json()["results"],
+        })
     else:
         return HttpResponse("Please enter a search query")
-
+        
     # Render the template
-    return render(request, 'search.html', context={
-        "data": data.json()["results"],
-    })
+    
 
 
 # Get Movie Detail 
