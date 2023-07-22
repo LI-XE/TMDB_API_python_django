@@ -23,10 +23,10 @@ DB_API_KEY = os.getenv('DB_API_KEY')
 
 # Home page
 def home(request):
-    configure()
     data = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={DB_API_KEY}&language=en-US&page=1")
     movies = data.json()
-
+    print(movies)
+    print(request.user)
     context = {
         "user": request.user,
         "movies": movies["results"],
@@ -34,7 +34,6 @@ def home(request):
     return render(request, "home.html", context)
 
 def loadmoreJson(request, current_page):
-    # currentPage += 1
     data = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={DB_API_KEY}&language=en-US&page={current_page}")
     return JsonResponse({'data': data.json(), 'current_page':current_page})
 
@@ -64,18 +63,47 @@ def search(request):
 
 # Get Movie Detail 
 def movie_detail_page(request, movie_id):
+    
     data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={DB_API_KEY}&language=en-US")
     if data:
         movie = data.json()
-        print(data)
+        favorites = Favorite.objects.filter(movieId = movie['id'])
+        is_added_to_favorites = False
+        if favorites:
+            for favorite in favorites:
+                if request.user in favorite.addTo.all():
+                    is_added_to_favorites = True
+        print(is_added_to_favorites)
         context={
             "movie": movie,
+            "favorites": favorites,
+            "is_added_to_favorites": is_added_to_favorites
         }
+        return render(request, "movieDetail.html", context)
     else:
         return HttpResponse("Sorry! This movie doesn't have movie detail.")
-    return render(request, "movieDetail.html", context)
+    
 
+@login_required
+def add_to_favorite(request, movie_id):
+    data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={DB_API_KEY}&language=en-US")
+    if data:
+        favorite_movie = data.json()
+        favorite = Favorite.objects.create(movieId =int(favorite_movie['id']), movieTitle = favorite_movie['original_title'], moviePost = favorite_movie['poster_path'])
+        if favorite not in request.user.favorites.all():
+            favorite.addTo.add(request.user)
+    return redirect(f"/movies/{movie_id}")
 
+@login_required
+def remove_from_favorite(request, movie_id):
+    data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={DB_API_KEY}&language=en-US")
+    favorite_movie = data.json()
+    movies = Favorite.objects.filter(movieId=favorite_movie['id'])
+    if movies:
+        for movie in movies:
+            if request.user in movie.addTo.all():
+                movie.addTo.remove(request.user)
+    return redirect(f"/movies/{movie_id}")
 
 
 def register_page(request):
@@ -118,6 +146,12 @@ def logout_user(request):
 def profile_page(request):
     return render(request, "profile.html")
 
-
+@login_required
 def favorite_page(request):
-    return render(request, "favorite.html")
+    user = request.user
+    context = {
+        "favorites": user.favorites.all()
+    }
+    print(user.favorites.all())
+    
+    return render(request, "favorite.html", context)

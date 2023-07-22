@@ -20,12 +20,6 @@
       <img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" alt={{movie.original_name}}>
     </div>
     <div class="right">
-      <div class="d-flex justify-content-end mb-3">
-        <a href="/addToFavorite/{{movie.id}}" type="button" class="btn btn-add" id="btn-add">
-          <i class="fa-regular fa-heart fa-lg mr-3"></i>
-          Add To Favorite
-        </a>
-      </div>
       <ul>
         {%if not movie.original_name %}
         <li><h2>Title: <span>{{movie.original_title}}</span></h2></li>
@@ -45,6 +39,19 @@
         <li><h2>Release Date: <span>{{movie.release_date}}</span></h2></li>
         <li><h2>Overview: </h2><h4 class="ml-4">{{movie.overview}}</h4></li>
       </ul>
+      <div class="d-flex justify-content-center mb-3">
+        {% if is_added_to_favorites == True  %}
+        <a href="/removeFromFavorite/{{movie.id}}" type="button" class="btn btn-add" id="btn-add">
+          <i class="fa-solid fa-heart fa-lg mr-3"></i>
+          Remove From Favorite
+        </a>
+        {% else %}
+        <a href="/addToFavorite/{{movie.id}}" type="button" class="btn btn-add" id="btn-add">
+          <i class="fa-regular fa-heart fa-lg mr-3"></i>
+          Add To Favorite
+        </a>
+        {% endif %}
+      </div>
     </div>
   </div>
   {% endblock %}

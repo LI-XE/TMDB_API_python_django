@@ -174,3 +174,17 @@ ul {
   border-radius: 1em;
   padding: 0.5em 1em;
 }
+
+/* ------------- Favorite Page -------------- */
+.favorite_page {
+  height: 100vh;
+}
+
+.favorite_page img {
+  width: 5rem;
+  height: auto;
+}
+
+.favorite_page table {
+  margin: 1em auto;
+}

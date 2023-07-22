@@ -1,5 +1,4 @@
 console.log("Ajax is working now.");
-// console.log(env.DB_API_KEY);
 
 // loadmore button
 const loadBtn = document.getElementById("btn");

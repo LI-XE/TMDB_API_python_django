@@ -13,8 +13,29 @@
 </head>
 <body>
   {% block content %}
-  <div class="container column center">
-    <h1>My Favorite Movies</h1>
+  <div class="favorite_page">
+    <h1 class="text-center mt-5 mb-5">My Favorite Movies</h1>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>Poster</th>
+          <th class="align-middle text-center">Title</th>
+          <th class="align-middle text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="tbody-light">
+        {% for movie in favorites %}
+        <tr>
+          <td><a href="/movies/{{movie.movieId}}"><img src="https://image.tmdb.org/t/p/w500{{movie.moviePost}}" alt={{movie.movieTitle}} class="image"></a></td>
+          <td class="align-middle text-center"><a href="/movies/{{movie.movieId}}">{{movie.movieTitle}}</a></td>
+          <td class="align-middle text-center"><a href="/removeFromFavorite/{{movie.movieId}}" type="button" class="btn btn-add" id="btn-add">
+            <i class="fa-solid fa-trash-can mr-2"></i>
+            Remove
+          </a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   {% endblock %}
 </body>
