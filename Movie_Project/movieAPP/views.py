@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .forms import RegistrationForm
-from .models import Favorite
+from .models import Favorite, Review
 import requests
 from django.conf import settings
 from django.contrib.auth import logout, login
@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from dotenv import load_dotenv
 import os
 
@@ -70,15 +70,18 @@ def movie_detail_page(request, movie_id):
         movie = data.json()
         favorites = Favorite.objects.filter(movieId = movie['id'])
         is_added_to_favorites = False
+        
         if favorites:
             for favorite in favorites:
                 if request.user in favorite.addTo.all():
                     is_added_to_favorites = True
         print(is_added_to_favorites)
+        reviews = Review.objects.filter(postId = movie_id),
         context={
             "movie": movie,
             "favorites": favorites,
-            "is_added_to_favorites": is_added_to_favorites
+            "is_added_to_favorites": is_added_to_favorites,
+            "reviews": reviews[0]
         }
         return render(request, "movieDetail.html", context)
     else:
@@ -97,14 +100,46 @@ def add_to_favorite(request, movie_id):
 
 @login_required
 def remove_from_favorite(request, movie_id):
-    data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={DB_API_KEY}&language=en-US")
-    favorite_movie = data.json()
-    movies = Favorite.objects.filter(movieId=favorite_movie['id'])
+    movies = Favorite.objects.filter(movieId=movie_id)
     if movies:
         for movie in movies:
             if request.user in movie.addTo.all():
                 movie.addTo.remove(request.user)
     return redirect(f"/movies/{movie_id}")
+
+@login_required
+def post_reviews(request, movie_id):
+    if request.POST:
+        errors = Review.objects.validate(request.POST)
+        if errors:
+            for e in errors:
+                messages.error(request, e)
+            return redirect(f"/movies/{movie_id}")
+        
+        review = Review.objects.create(postId=int(movie_id), content=request.POST["content"], reviewer=request.user )
+        print(review)
+        return redirect(f"/movies/{movie_id}")
+
+@login_required
+def likes_review(request, movie_id, review_id):
+    review = Review.objects.get(id= review_id)
+    liked_review = False
+    if review.likes.filter(id=request.user.id).exists():
+        review.likes.remove(request.user)
+        liked_review = False
+    else:   
+        review.likes.add(request.user)
+        liked_review = True
+    return HttpResponseRedirect(f"/movies/{movie_id}")
+
+@login_required
+def delete_review(request, movie_id, review_id):
+    review = Review.objects.get(id = review_id)
+    if request.user.id == review.reviewer_id:
+        review.delete()
+    return redirect(f"/movies/{movie_id}")
+
+
 
 
 def register_page(request):

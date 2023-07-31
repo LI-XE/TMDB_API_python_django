@@ -128,6 +128,7 @@ ul {
 /* ------------- Detail Page -------------- */
 .detail {
   width: 100%;
+  height:auto;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -135,18 +136,20 @@ ul {
 
 .detail li {
   margin-bottom: 2em;
+  
 }
 .detail span {
   font-weight: 300;
   margin-left: 1em;
 }
 
+
 .detail .right {
   margin: 0 3rem;
 }
 .detail .left  {
   width: 100rem;
-  height: 120rem;
+  height: auto;
   margin: 0 3em;
 }
 
@@ -175,6 +178,11 @@ ul {
   padding: 0.5em 1em;
 }
 
+.detail .bottom {
+  padding-top: 2em;
+  border-top: 0.3rem solid gray;
+}
+
 /* ------------- Favorite Page -------------- */
 .favorite_page {
   height: 100vh;
@@ -188,3 +196,4 @@ ul {
 .favorite_page table {
   margin: 1em auto;
 }
+

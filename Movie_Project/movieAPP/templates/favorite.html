@@ -15,6 +15,7 @@
   {% block content %}
   <div class="favorite_page">
     <h1 class="text-center mt-5 mb-5">My Favorite Movies</h1>
+    {% if favorites|length > 0 %}
     <table class="table table-striped">
       <thead class="thead-dark">
         <tr>
@@ -36,6 +37,9 @@
         {% endfor %}
       </tbody>
     </table>
+    {% else %}
+    <h2>There is no favorites.</h2>
+    {% endif %}
   </div>
   {% endblock %}
 </body>

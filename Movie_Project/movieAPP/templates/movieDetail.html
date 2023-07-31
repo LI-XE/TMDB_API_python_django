@@ -6,16 +6,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% load static %}
-  <link rel='stylesheet' href="{% static 'style.css' %}">
-  <script defer src="{% static 'main.js' %}"></script>
+  <link rel='stylesheet' href="{% static 'style.css' %}"  type="text/css">
+  <script defer src="{% static 'main.js' %}" ></script>
+  <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><title>Home</title>
   <title>Movie Detail</title>
 </head>
 <body>
   {% block content %}
   <h1 class="text-center m-5">Movie Detail</h1>
-  <div class="detail">
+  <div class="detail mb-5">
     <div class="left">
       <img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" alt={{movie.original_name}}>
     </div>
@@ -54,6 +58,57 @@
       </div>
     </div>
   </div>
+  <div class="bottom">
+    <h2>Reviews:</h2>
+    <form action="/movies/{{movie.id}}/add/review" method="POST" class="form d-flex my-3">
+      {% csrf_token %}
+      <input type="hidden" name="review" value={{movie.id}}>
+      <textarea name="content" class="form-control"  placeholder="Add a Comment Here."></textarea>
+      <button type="submit" class="btn btn-primary mb-2 ml-2">Submit</button>
+    </form>
+    <div>
+      {% if messages %}
+      <ul class="messages text-danger p-5">
+          {% for message in messages %}
+          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      <ul class="reviews display-6 list-unstyled">
+        {% if not reviews %}
+        <h4 class="mt-5"> No Review yet! Post the first review! </h4>
+        {% else %}
+          {% for review in reviews %}
+          <li class="border-bottom d-flex justify-content-between align-items-center">
+            <div class="left py-2">
+              <span class="ml-3 font-weight-bold text-secondary">{{ review.reviewer.username }}  -- {{ review.created_at|date:"M d, Y"}}</span>
+              <p class="px-3 pt-2" > "{{ review.content}}"</p>
+            </div>
+            <div class="right d-flex justify-content-center align-items-center">
+              {% if request.user.id == review.reviewer_id %}
+              <a href="/movies/{{movie.id}}/delete/{{review.id}}" class="text-dark mr-5" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash-can mr-2"></i></a>
+              {% endif %}
+              {% if request.user %}
+              <form action="/movies/{{movie.id}}/likes/{{review.id}}" method="POST">
+                {% csrf_token %}
+              {% if request.user in review.likes.all %}
+              <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-solid fa-heart fa-lg ml-3"></i></button>
+              {% else %}
+              <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3"></i></button>
+              {% endif %}
+            </form>
+            {% else %}
+            <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3"></i></button>
+            {% endif %}
+            </div>
+            
+          </li>
+          {% endfor %}
+          {% endif %}
+      </ul>
+    </div>
+  </div>
   {% endblock %}
+  
 </body>
 </html>

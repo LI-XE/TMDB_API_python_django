@@ -13,9 +13,8 @@ urlpatterns = [
     path('loadmorejson/<int:current_page>', views.loadmoreJson),
     path('addToFavorite/<int:movie_id>', views.add_to_favorite),
     path('removeFromFavorite/<int:movie_id>', views.remove_from_favorite),
+    path('movies/<int:movie_id>/add/review', views.post_reviews),
+    path('movies/<int:movie_id>/likes/<int:review_id>', views.likes_review),
+    path('movies/<int:movie_id>/delete/<int:review_id>', views.delete_review),
     # path('profile/<int:user_id>', views.user_profile),
-    # path('movies/<int:movie_id>/add/favorite', views.add_favorite),
-    # path('movies/<int:movie_id>/remove/favorite', views.remove_favorite),
-    # path('comment/<int:comment_id>/delete/<int:movie_id>', views.comment_delete),
-    # path('comment/<int:comment_id>/create', views.create_comment),
 ]
