@@ -91,20 +91,19 @@
               {% if request.user %}
               <form action="/movies/{{movie.id}}/likes/{{review.id}}" method="POST">
                 {% csrf_token %}
-              {% if request.user in review.likes.all %}
-              <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-solid fa-heart fa-lg ml-3"></i></button>
+                {% if request.user in review.likes.all %}
+                <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-solid fa-heart fa-lg ml-3"></i></button>
+                {% else %}
+                <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3"></i></button>
+                {% endif %}
+              </form>
               {% else %}
               <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3"></i></button>
               {% endif %}
-            </form>
-            {% else %}
-            <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3"></i></button>
-            {% endif %}
             </div>
-            
           </li>
           {% endfor %}
-          {% endif %}
+        {% endif %}
       </ul>
     </div>
   </div>

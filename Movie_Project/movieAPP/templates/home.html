@@ -38,7 +38,7 @@
         </a>
         {% if user.is_authenticated %}
         <div class="d-flex justify-content-center align-items-center">
-        <a href="/profile"><h5 class="mx-3 my-2">Hello, {{ user.username }}</h5></a>
+        <a href="/profile/{{current_user.id}}"><h5 class="mx-3 my-2">Hello, {{ current_user.username }}</h5></a>
         <a href="/logout" class="text-light">Signout</a>
         </div>
         {% else %}

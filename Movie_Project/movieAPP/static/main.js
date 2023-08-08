@@ -40,3 +40,17 @@ function loadmorePost(current_page) {
     },
   });
 }
+
+//  edit profile
+const editProfileBtn = document.getElementById("edit-profile");
+const editPhotoBtn = document.getElementById("edit-profile-photo");
+
+editProfileBtn.addEventListener("click", () => {
+  console.log("Your ajax is working");
+  $("#edit_form").toggle();
+});
+
+editPhotoBtn.addEventListener("click", () => {
+  console.log("Your ajax is working");
+  $("#edit_photo_form").toggle();
+});
