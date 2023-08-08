@@ -66,7 +66,7 @@
   {% endif %}
   <div class="border-top pt-5 none-visible profile_edit_form" id="edit_form">
     
-    <form action="/update/profile/{{request.user.id}}" method="POST" enctype="multipart/form-data" class="col-sm-8">
+    <form action="/update/user/{{request.user.id}}" method="POST" enctype="multipart/form-data" class="col-sm-8">
       {% csrf_token %}
       {{user_form.as_p}}
       <div class="form-group row center">
