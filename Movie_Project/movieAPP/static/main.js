@@ -41,6 +41,13 @@ function loadmorePost(current_page) {
   });
 }
 
+const loggedinUser = document.getElementById("loggedin-user");
+
+loggedinUser.addEventListener("click", () => {
+  console.log("Your ajax is working");
+  $(".ul-contents").toggle();
+});
+
 //  edit profile
 const editProfileBtn = document.getElementById("edit-profile");
 const editPhotoBtn = document.getElementById("edit-profile-photo");

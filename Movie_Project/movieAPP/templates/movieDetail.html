@@ -21,7 +21,7 @@
   <h1 class="text-center m-5">Movie Detail</h1>
   <div class="detail mb-5">
     <div class="left">
-      <img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" alt={{movie.original_name}}>
+      <img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" class="movie_image_big" alt={{movie.original_name}}>
     </div>
     <div class="right">
       <ul>
@@ -81,8 +81,17 @@
           {% for review in reviews %}
           <li class="border-bottom d-flex justify-content-between align-items-center">
             <div class="left py-2">
-              <span class="ml-3 font-weight-bold text-secondary">{{ review.reviewer.username }}  -- {{ review.created_at|date:"M d, Y"}}</span>
-              <p class="px-3 pt-2" > "{{ review.content}}"</p>
+                <div class="d-flex justify-content-start">
+                  <a href="/profile/{{review.reviewer.id}}">
+                    {% if review.reviewer.profile.image %}
+                    <img src="{{review.reviewer.profile.image.url}}" class="user_image_small" alt="profile_photo" />
+                    {% else %}
+                    <img src="/media/noAvatar.png" class="user_image_small" alt="profile_photo" />
+                    {% endif %}
+                  </a>
+                  <span class="ml-3 font-weight-bold text-secondary"><a href="/profile/{{review.reviewer.id}}">{{ review.reviewer.username }}</a>  -- {{ review.created_at|date:"M d, Y"}}</span>
+                </div>
+                <p class="pl-5 pt-2" > "{{ review.content}}"</p>
             </div>
             <div class="right d-flex justify-content-center align-items-center">
               {% if request.user.id == review.reviewer_id %}
@@ -92,13 +101,13 @@
               <form action="/movies/{{movie.id}}/likes/{{review.id}}" method="POST">
                 {% csrf_token %}
                 {% if request.user in review.likes.all %}
-                <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-solid fa-heart fa-lg ml-3"></i></button>
+                <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-solid fa-heart fa-lg ml-3 text-danger"></i></button>
                 {% else %}
-                <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3"></i></button>
+                <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3 text-danger"></i></button>
                 {% endif %}
               </form>
               {% else %}
-              <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3"></i></button>
+              <button type="submit" name="review_id" value="{{ review.id }}" class="btn">{{review.total_likes}}<i class="fa-regular fa-heart fa-lg ml-3 text-danger"></i></button>
               {% endif %}
             </div>
           </li>

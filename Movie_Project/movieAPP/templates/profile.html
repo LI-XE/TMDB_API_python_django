@@ -29,8 +29,8 @@
         {% endif %}
       </div>
       <ul class="col-sm-5">
-        <li class="row justify-content-start align-items-center"><h3 class="col-sm-3">Username:</h3><span class="ml-5">{{user.username}}</span></li>
-        <li class="row justify-content-start align-items-center"><h3 class="col-sm-3">Email:</h3><span class="ml-5">{{user.email}}</span></li>
+        <li><h3 class="col-sm-3">Username:</h3><span class="ml-4">{{user.username}}</span></li>
+        <li><h3 class="col-sm-3">Email:</h3><span class="ml-4">{{user.email}}</span></li>
         {% if user.id == current_user.id %}
         <li class="mt-5">
           <div class="row">

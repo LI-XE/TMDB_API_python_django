@@ -166,6 +166,7 @@ def remove_from_favorite(request, movie_id):
 
 
 # Profile Page
+@login_required
 def user_profile_page(request, user_id):
     user = User.objects.get(id=user_id)
     current_user = User.objects.get(id= request.user.id)
