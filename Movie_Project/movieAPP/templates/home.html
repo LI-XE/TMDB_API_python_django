@@ -22,54 +22,56 @@
       <a href="/" class="text-right my-1">
         <div class=" d-flex justify-content-center">
           <i class="fa-solid fa-film fa-2x mr-3"></i>
-          <h4>Movie</h4>
+          <h4 class="mr-4">Movie</h4>
         </div>
       </a>
-      <div class="full-screen">
-        <form class="form-inline my-2 my-lg-0 mr-5" action="/search" method="GET">
+      <div class="nav-right">
+        <form class="search" action="/search" method="GET">
           {% csrf_token %}
-          <input class="form-control mr-sm-2" name="q" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-warning bg-light my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+          <input  name="q" type="text" placeholder="Search" aria-label="Search">
+          <button class="searchBtn" type="submit"><i class="fa fa-search"></i></button>
         </form>
-        <a href="/favorite" class="text-right my-2 mr-5  ml-auto">
+        <div class="full-screen">
+          <a href="/favorite" class="text-right my-2 mr-5  ml-auto">
+            <div class="d-flex justify-content-center align-items-center">
+              <i class="fa-brands fa-gratipay mr-2"></i>Favorite Movies
+            </div>
+          </a>
+          {% if user.is_authenticated %}
           <div class="d-flex justify-content-center align-items-center">
-            <i class="fa-brands fa-gratipay mr-2"></i>Favorite Movies
+          <a href="/profile/{{current_user.id}}"><h5 class="mx-3 my-2">Hello, {{ current_user.username }}</h5></a>
+          <a href="/logout" class="text-light">Signout</a>
           </div>
-        </a>
-        {% if user.is_authenticated %}
-        <div class="d-flex justify-content-center align-items-center">
-        <a href="/profile/{{current_user.id}}"><h5 class="mx-3 my-2">Hello, {{ current_user.username }}</h5></a>
-        <a href="/logout" class="text-light">Signout</a>
-        </div>
-        {% else %}
-        <div class="d-flex justify-content-center align-items-center">
-        <i class="fa-sharp fa-regular fa-circle-user mr-3 fa-1x"></i>
-        <a href="/login" class="mr-3 login-btn">Sign In</a> | <a href="/register" class="ml-3">Sign Up</a>
-        </div>
-        {% endif %}
-      </div>
-      {% if user.is_authenticated %}
-      <div class="mobile-screen" id="loggedin-user">
-          {% if request.user.profile.image %}
-          <img src="{{current_user.profile.image.url}}" class="user_image_small mr-3" alt="profile_photo" />
           {% else %}
-          <img src="/media/noAvatar.png" class="user_image_small mr-3" alt="profile_photo" />
-          {% endif %}{{current_user.username}}
-          <i class="fa fa-chevron-down ml-3"></i>
-      </div>
-      <ul class="mobile-screen ul-contents">
-        <li><a href="/profile/{{current_user.id}}"><i class="fa-sharp fa-regular fa-circle-user mr-2"></i>Profile</a></li>
-        <li><a href="/favorite" class="text-right my-2 mr-5  ml-auto d-flex justify-content-center align-items-center">
-            <i class="fa-brands fa-gratipay mr-2"></i>Favorite Movies
-        </a></li>
-        <li><a href="/logout" class="text-light"><i class="fa fa-sign-out mr-2"></i>Signout</a></li>
-      </ul>
-      {% else %}
-        <div class="mobile-screen login-user">
-        <i class="fa-sharp fa-regular fa-circle-user mr-3 fa-1x"></i>
-        <a href="/login" class="mr-3 login-btn">Sign In</a> | <a href="/register" class="ml-3">Sign Up</a>
+          <div class="row center">
+          <i class="fa-sharp fa-regular fa-circle-user mr-3 fa-1x"></i>
+          <a href="/login" class="mr-3 login-btn">Sign In</a> | <a href="/register" class="ml-3">Sign Up</a>
+          </div>
+          {% endif %}
         </div>
-        {% endif %}
+        {% if user.is_authenticated %}
+        <div class="mobile-screen" id="loggedin-user">
+            {% if request.user.profile.image %}
+            <img src="{{current_user.profile.image.url}}" class="user_image_small mr-3" alt="profile_photo" />
+            {% else %}
+            <img src="/media/noAvatar.png" class="user_image_small mr-3" alt="profile_photo" />
+            {% endif %}{{current_user.username}}
+            <i class="fa fa-chevron-down ml-3"></i>
+        </div>
+        <ul class="mobile-screen ul-contents">
+          <li><a href="/profile/{{current_user.id}}"><i class="fa-sharp fa-regular fa-circle-user mr-2"></i>Profile</a></li>
+          <li><a href="/favorite" class="text-right my-2 mr-5  ml-auto d-flex justify-content-center align-items-center">
+              <i class="fa-brands fa-gratipay mr-2"></i>Favorite Movies
+          </a></li>
+          <li><a href="/logout" class="text-light"><i class="fa fa-sign-out mr-2"></i>Signout</a></li>
+        </ul>
+        {% else %}
+          <div class="mobile-screen login-user">
+          <i class="fa-sharp fa-regular fa-circle-user mr-2 fa-1x"></i>
+          <a href="/login" class="mr-2 login-btn">Sign In</a> | <a href="/register" class="ml-2">Sign Up</a>
+          </div>
+          {% endif %}
+      </div>
     </nav>
     {% endblock %}
     <div class="container">

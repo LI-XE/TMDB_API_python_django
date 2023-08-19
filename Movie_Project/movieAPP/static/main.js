@@ -41,11 +41,12 @@ function loadmorePost(current_page) {
   });
 }
 
+// user dropdown lists
 const loggedinUser = document.getElementById("loggedin-user");
-
+const lists = document.querySelector(".ul-contents");
 loggedinUser.addEventListener("click", () => {
   console.log("Your ajax is working");
-  $(".ul-contents").toggle();
+  lists.classList.toggle("active");
 });
 
 //  edit profile
