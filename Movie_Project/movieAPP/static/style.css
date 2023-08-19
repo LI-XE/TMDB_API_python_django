@@ -433,6 +433,31 @@ ul {
     font-weight: bold;
   }
 
+  .detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+  }
+
+  
+  .detail .left  {
+    width: 80%;
+    height: auto;
+    margin: 0 3em;
+  }
+  
+  .detail .right {
+    margin-top: 2em;
+  }
+  
+  .detail .left .movie_image_big {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
 /* ------------- Profile Page -------------- */
 .profile {
   width: 100%;
