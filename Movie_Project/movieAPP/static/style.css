@@ -309,11 +309,12 @@ ul {
 
 @media only screen and (max-width: 1023px){
   .nav-right {
-    width: 50rem;
+    width: 30rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
   }
+
   .search {
     position: relative;
     width: 3rem;
@@ -329,9 +330,6 @@ ul {
     overflow: hidden;
   }
 
-  .mobile-screen {
-    z-index: 1;
-  }
 
   .search:hover {
     width: 100%;
@@ -401,6 +399,10 @@ ul {
     align-items: center;
   }
 
+  .login-btn {
+    display: inline;
+  }
+
   #loggedin-user:hover {
     color: tomato;
   }
@@ -409,7 +411,6 @@ ul {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    z-index: 1;
   }
 
   .ul-contents {
